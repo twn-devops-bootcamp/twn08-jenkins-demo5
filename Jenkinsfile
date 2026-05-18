@@ -1,36 +1,41 @@
-pipeline {
-    agent any
-    parameters {
-        choice(name: 'VERSION', choices: ['1.1.1','2.2.2','3.3.3'])
-        booleanParam(name: 'executeTests', defaultValue: true, description:'')
-    }
+def gv
 
-    stages {
-        
-        stage("build") {
-            steps {
-                echo 'building the application'
-            }
-        }
-        
-        
-        stage("test") {
-            when {
-               expression {
-                params.executeTests
-                }
-             }
-            steps {
-               echo 'testing the application'
-            }
-        }
-    
-        stage("deploy") {
-           steps {
-               echo 'deploying the application'
-               echo "deploying version ${params.VERSION}"
-           }
-        }
+pipeline {   
+    agent any
+    tools {
+        maven 'Maven'
     }
-    
-}
+    stages {
+        stage("init") {
+            steps {
+                script {
+                    gv = load "script.groovy"
+                }
+            }
+        }
+        stage("build jar") {
+            steps {
+                script {
+                    gv.buildJar()
+
+                }
+            }
+        }
+
+        stage("build image") {
+            steps {
+                script {
+                    gv.buildImage()
+                }
+            }
+        }
+
+        stage("deploy") {
+            steps {
+                script {
+                    gv.deployApp()
+                }
+            }
+        }               
+    }
+} 
