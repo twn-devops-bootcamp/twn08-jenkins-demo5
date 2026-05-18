@@ -18,6 +18,7 @@ pipeline {
             steps {
                 script {
                         echo "building the docker image"
+                        echo "building..."
                 }
             }
         }
