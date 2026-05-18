@@ -22,10 +22,12 @@ pipeline {
                 }
             }
         }
-        stage("build image") {
+        stage("build and push image") {
             steps {
                 script {
                     buildImage 'karentrasporte/demo-app:jma-3.0'
+                    dockerLogin()
+                    dockerPush 'karentrasporte/demo-app:jma-3.0'
                 }
             }
         }
