@@ -45,6 +45,7 @@ pipeline {
                 ok "Done"
                 parameters {
                     choice(name: 'ENV', choices: ['dev','stg','prod'], description: '')
+                    choice(name: 'ENV2', choices: ['dev','stg','prod'], description: '')
                 }
             }
            steps {
