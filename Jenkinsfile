@@ -44,6 +44,25 @@ pipeline {
                 }
            }
         }
+        stage("commit version update") {
+           steps {
+                script {
+                    withCredentials ([usernamePassword(credentialsId: 'f9a0a753-db4b-4c34-8441-0cdf9e3e6fd6', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                        sh 'git config --global user.email "test@test.com"'
+                        sh 'git config --global user.name "Jenkins test"'
+
+                        sh 'git status'
+                        sh 'git branch'
+                        sh 'git config --list'
+
+                        sh "git remote set-url origin https://${USER}:${PASS}@github.com/twn-devops-bootcamp/twn08-jenkins-demo5.git"
+                        sh 'git add .'
+                        sh 'git commit -m "Jenkins version bump"'
+                        sh 'git push origin HEAD:jenkins-jobs'
+                    }
+                }
+           }
+        }
     }
 
 }
